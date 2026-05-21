@@ -79,15 +79,21 @@
     return (match ? match[0] : clean[0]).toUpperCase();
   }
 
+  function getHighlighter() {
+    return typeof window !== "undefined" && window.hljs ? window.hljs : null;
+  }
+
   marked.setOptions({
     breaks: true,
     gfm: true,
     highlight: (code, lang) => {
+      const highlighter = getHighlighter();
+      if (!highlighter) return code;
       try {
-        if (lang && hljs.getLanguage(lang)) {
-          return hljs.highlight(code, { language: lang }).value;
+        if (lang && highlighter.getLanguage(lang)) {
+          return highlighter.highlight(code, { language: lang }).value;
         }
-        return hljs.highlightAuto(code).value;
+        return highlighter.highlightAuto(code).value;
       } catch { return code; }
     }
   });
@@ -310,9 +316,11 @@
   function renderMarkdown(bubble, text, withCursor = false) {
     const html = marked.parse(text || "");
     bubble.innerHTML = html + (withCursor ? '<span class="cursor-blink"></span>' : "");
+    const highlighter = getHighlighter();
+    if (!highlighter) return;
     bubble.querySelectorAll("pre code").forEach(b => {
       if (!b.dataset.hl) {
-        hljs.highlightElement(b);
+        highlighter.highlightElement(b);
         b.dataset.hl = "1";
       }
     });
