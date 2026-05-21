@@ -21,7 +21,7 @@
   --sidebar-width: 308px;
   --sidebar-peek: 76px;
   --safe-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
-  --hero-glow: rgba(248, 249, 250, 0.16);
+  --hero-glow: rgba(248, 249, 250, 0.24);
 }
 
 * { box-sizing: border-box; }
@@ -50,9 +50,9 @@ body.sidebar-collapsed {
 .bg-base {
   position: absolute; inset: 0;
   background:
-    radial-gradient(circle 1200px at 8% 10%, rgba(146, 152, 154, 0.34) 0%, rgba(58, 63, 64, 0.24) 24%, rgba(19, 22, 22, 0.9) 56%, #0b0d0d 100%),
-    radial-gradient(circle 900px at 50% 34%, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 28%, transparent 62%),
-    linear-gradient(180deg, #131717 0%, #0d0f10 100%);
+    radial-gradient(circle 1200px at 8% 10%, rgba(186, 192, 194, 0.38) 0%, rgba(78, 84, 85, 0.24) 24%, rgba(21, 24, 24, 0.82) 56%, #0c0e0f 100%),
+    radial-gradient(circle 900px at 50% 34%, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.035) 28%, transparent 62%),
+    linear-gradient(180deg, #151919 0%, #0f1213 100%);
 }
 .bg-grid {
   position: absolute; inset: -2px;
@@ -94,8 +94,8 @@ body.sidebar-collapsed {
 .bg-vignette {
   position: absolute; inset: 0;
   background:
-    radial-gradient(80% 46% at 50% 34%, rgba(255,255,255,0.045), transparent 64%),
-    radial-gradient(120% 90% at 50% 50%, transparent 46%, rgba(0,0,0,0.44) 100%);
+    radial-gradient(80% 46% at 50% 34%, rgba(255,255,255,0.06), transparent 64%),
+    radial-gradient(120% 90% at 50% 50%, transparent 48%, rgba(0,0,0,0.34) 100%);
 }
 
 .sidebar {
@@ -440,17 +440,75 @@ body.sidebar-collapsed .open-sidebar-btn {
 }
 .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
 .brand-name {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
   font-weight: 600;
   font-size: 16px;
   letter-spacing: -0.3px;
-  background: linear-gradient(180deg, #ffffff 0%, #c4c7c8 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+  color: inherit;
+}
+.brand-name-text {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(180deg, #ffffff 0%, #d8dcde 52%, #b9c0c2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow:
+    0 0 10px rgba(255,255,255,0.18),
+    0 0 22px rgba(214, 221, 224, 0.12);
 }
 .brand-ai {
   font-weight: 500;
   background: linear-gradient(180deg, #d8dadb 0%, #8e9293 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+.silver-sheen {
+  position: relative;
+  isolation: isolate;
+  text-shadow:
+    0 0 10px rgba(255,255,255,0.2),
+    0 0 22px rgba(214, 221, 224, 0.18),
+    0 0 44px rgba(180, 188, 191, 0.12);
+}
+.silver-sheen::after {
+  content: "";
+  position: absolute;
+  inset: -0.08em -0.18em;
+  background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.08) 28%, rgba(255,255,255,0.28) 48%, rgba(255,255,255,0.08) 68%, transparent 100%);
+  opacity: 0.85;
+  filter: blur(10px);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  animation: silverSweep 6.8s ease-in-out infinite;
+}
+.brand-name.silver-sheen::after {
+  display: none;
+}
+.brand-sparks {
+  position: absolute;
+  inset: -4px -14px -16px -8px;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
+}
+.spark {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.98) 0%, rgba(231,236,238,0.78) 48%, rgba(231,236,238,0) 100%);
+  box-shadow: 0 0 8px rgba(255,255,255,0.72);
+  opacity: 0;
+  transform: translate3d(0, 0, 0) scale(0.65);
+  animation: sparkFall 3.6s linear infinite;
+}
+.spark-1 { top: 4px; right: 18%; animation-delay: 0s; }
+.spark-2 { top: 9px; right: 5%; animation-delay: 0.72s; }
+.spark-3 { top: -1px; right: 30%; animation-delay: 1.35s; }
+.spark-4 { top: 5px; right: -2px; animation-delay: 2.1s; }
+.spark-5 { top: 1px; right: 42%; animation-delay: 2.85s; }
 .brand-sub {
   font-size: 10.5px;
   color: var(--fg-mute);
@@ -547,6 +605,9 @@ body.sidebar-collapsed .open-sidebar-btn {
   background: linear-gradient(180deg, #ffffff 0%, #f4f6f7 42%, #d4d9da 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
   text-shadow: 0 10px 28px rgba(255,255,255,0.08);
+}
+.welcome-title {
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.12)) drop-shadow(0 0 28px rgba(216, 223, 225, 0.12));
 }
 .welcome-sub {
   margin: 0 0 36px;
@@ -863,6 +924,36 @@ body.sidebar-collapsed .open-sidebar-btn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
+@keyframes silverSweep {
+  0%, 100% {
+    transform: translateX(-28%) skewX(-18deg);
+    opacity: 0.38;
+  }
+  45% {
+    transform: translateX(0%) skewX(-18deg);
+    opacity: 0.9;
+  }
+  70% {
+    transform: translateX(18%) skewX(-18deg);
+    opacity: 0.52;
+  }
+}
+@keyframes sparkFall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -2px, 0) scale(0.45);
+  }
+  18% {
+    opacity: 0.95;
+  }
+  72% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(12px, 24px, 0) scale(1);
+  }
+}
 
 /* ===================================================================
    RESPONSIVE
@@ -963,4 +1054,8 @@ body.sidebar-collapsed .open-sidebar-btn {
 
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
+  .silver-sheen::after,
+  .spark {
+    animation: none !important;
+  }
 }
